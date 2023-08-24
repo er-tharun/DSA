@@ -41,6 +41,13 @@ public class BinaryTreeIterativeTraversal {
         for(int itr:inOrder) {
             System.out.print(itr + " ");
         }
+
+        System.out.println("\n");
+        System.out.println("PostOrder Traversal");
+        var postOrder = postOrderTraversal(root);
+        for(int itr:postOrder) {
+            System.out.print(itr + " ");
+        }
     }
 
     public static ArrayList<ArrayList<Integer>> levelOrderTraversal(BinaryTreeNode root) {
@@ -114,6 +121,38 @@ public class BinaryTreeIterativeTraversal {
                 result.add(top.getData());
                 current = top.getRight();
             }
+        }
+        return result;
+    }
+
+    public static List<Integer> postOrderTraversal(BinaryTreeNode root) {
+        var result = new ArrayList<Integer>();
+        if(root == null) {
+            return result;
+        }
+        Stack<BinaryTreeNode> stack = new Stack<BinaryTreeNode>();
+        stack.push(root);
+        BinaryTreeNode prev = null;
+        while (!stack.isEmpty()) {
+            BinaryTreeNode curr = stack.peek();
+            if(prev == null || prev.getLeft() == curr || prev.getRight() == curr) {
+                //if previous is current parent then traverse down the tree
+                if (curr.getLeft() != null) {
+                    stack.push(curr.getLeft());
+                } else if (curr.getRight() != null) {
+                    stack.push(curr.getRight());
+                }
+            }
+            else if (curr.getLeft() == prev) {
+                if(curr.getRight() != null) {
+                    stack.push(curr.getRight());
+                }
+            }
+            else {
+                result.add(curr.getData());
+                stack.pop();
+            }
+            prev = curr;
         }
         return result;
     }
